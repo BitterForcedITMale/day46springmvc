@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+    <!-- 配置spring创建容器时要扫描的包 -->
+    <context:component-scan base-package="com.itheima"></context:component-scan>
+    <!-- 配置视图解析器 -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" id="viewResolver">
+        <property value="/WEB-INF/pages/" name="prefix"/>
+        <property value=".jsp" name="suffix" />
+    </bean>
+
+    <!--开启mvc注解-->
+    <mvc:annotation-driven/>
+        <mvc:resources location="/js/" mapping="/js/**"/>
+
+        <mvc:resources location="/img/" mapping="/img/**"/>
+
+        <mvc:resources location="/html/" mapping="/html/**"/>
+
+        <mvc:resources location="/css/" mapping="/css/**"/>
+
+        <!--注册文件上传解析器 id是写死的不能乱改，就要写 multipartResolver -->
+        <!--配置文件上传解析器-->
+        <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+            <property name="maxUploadSize" value="5242880"></property>
+        </bean>
+        <!--自定义异常处理器-->
+        <bean class="com.itheima.exceptionhandler.SysExceptionRolver"/>
+     <!--自定义拦截器-->
+        <mvc:interceptors>
+            <!--配置自定义的拦截器-->
+            <mvc:interceptor>
+                <mvc:mapping path="/**"/>
+                <bean class="com.itheima.web.interceptor.Intercepter01"/>
+            </mvc:interceptor>
+        </mvc:interceptors>
+</beans>
